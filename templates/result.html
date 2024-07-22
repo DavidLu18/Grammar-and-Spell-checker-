@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grammar and Spell Checker Results</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@900&display=swap">
+    <style>
+        body {
+            min-height: 100vh;
+            background: rgb(74,189,172);
+            background: radial-gradient(circle, rgba(74,189,172,1) 0%, rgba(88,212,193,1) 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Poppins', sans-serif;
+            padding: 0;
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+            z-index: 1;
+            position: relative;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+            text-transform: uppercase;
+        }
+        p {
+            color: #333;
+            white-space: pre-wrap;
+        }
+        .highlight {
+            background-color: yellow;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Original Text</h1>
+        <p>{{ original_text }}</p>
+        <h1>Corrected Text</h1>
+        <p>{{ corrected_text }}</p>
+        <h2>Issues Found</h2>
+        <ul>
+        {% for match in matches %}
+            <li>{{ match.message }} at position {{ match.offset }}</li>
+        {% endfor %}
+        </ul>
+        <a href="/">Go Back</a>
+    </div>
+</body>
+</html>
