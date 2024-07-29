@@ -26,5 +26,4 @@ aiohttp_socks
 pywebview
 plyer
 cryptography
-nodriver
 
