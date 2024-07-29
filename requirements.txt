@@ -27,4 +27,4 @@ pywebview
 plyer
 cryptography
 nodriver
-pip freeze > requirements.txt
+

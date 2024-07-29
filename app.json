@@ -1,0 +1,16 @@
+{
+    "name": "my-heroku-app",
+    "scripts": {},
+    "env": {},
+    "formation": {},
+    "addons": [],
+    "buildpacks": [
+      {
+        "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git"
+      },
+      {
+        "url": "heroku/python"
+      }
+    ]
+  }
+  
