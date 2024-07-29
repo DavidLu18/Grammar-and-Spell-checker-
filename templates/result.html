@@ -8,26 +8,26 @@
     <style>
         body {
             min-height: 100vh;
-            background: rgb(74,189,172);
             background: radial-gradient(circle, rgba(74,189,172,1) 0%, rgba(88,212,193,1) 100%);
             display: flex;
             justify-content: center;
             align-items: center;
             font-family: 'Poppins', sans-serif;
-            padding: 0;
+            padding: 20px;
             margin: 0;
             position: relative;
             overflow: hidden;
         }
         .container {
             background-color: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            max-width: 700px;
             width: 100%;
             z-index: 1;
             position: relative;
+            box-sizing: border-box;
         }
         h1, h2 {
             text-align: center;
@@ -37,9 +37,60 @@
         p {
             color: #333;
             white-space: pre-wrap;
+            margin: 15px 0;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .highlight {
-            background-color: yellow;
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+        symbol path {
+            fill: rgba(255, 0, 0, 0.5);
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                border-radius: 15px;
+            }
+            h1, h2 {
+                font-size: 1.5em;
+            }
+            button {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -49,13 +100,62 @@
         <p>{{ original_text }}</p>
         <h1>Corrected Text</h1>
         <p>{{ corrected_text }}</p>
-        <h2>Issues Found</h2>
-        <ul>
-        {% for match in matches %}
-            <li>{{ match.message }} at position {{ match.offset }}</li>
-        {% endfor %}
-        </ul>
+        <button id="copyOriginal">Copy Original Text</button>
+        <button id="copyCorrected">Copy Corrected Text</button>
         <a href="/">Go Back</a>
     </div>
+    <svg id="hearts">
+        <symbol id="heart" viewBox="0 0 32 29.6">
+            <path d="M23.6,0c-3.4,0-6.4,1.7-8.6,4.3C12.8,1.7,9.8,0,6.4,0C2.9,0,0,2.9,0,6.4c0,11.3,16,22.4,16,22.4
+            s16-11.1,16-22.4C32,2.9,29.1,0,25.6,0H23.6z"/>
+        </symbol>
+    </svg>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const svg = document.getElementById('hearts');
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+
+            for (let i = 0; i < 50; i++) {
+                const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+                use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#heart');
+                use.setAttribute('x', Math.random() * width);
+                use.setAttribute('y', height + (Math.random() * 100));
+                use.setAttribute('width', Math.random() * 50 + 10);
+                use.setAttribute('height', Math.random() * 50 + 10);
+                use.style.animation = `float ${Math.random() * 15 + 5}s ease-in-out infinite`;
+                use.style.opacity = Math.random();
+                svg.appendChild(use);
+            }
+
+            const style = document.createElement('style');
+            style.innerHTML = `
+                @keyframes float {
+                    0% { transform: translateY(0) }
+                    100% { transform: translateY(-200vh) }
+                }
+            `;
+            document.head.appendChild(style);
+
+            const copyOriginal = document.getElementById('copyOriginal');
+            const copyCorrected = document.getElementById('copyCorrected');
+
+            copyOriginal.addEventListener('click', () => {
+                navigator.clipboard.writeText("{{ original_text }}").then(() => {
+                    alert('Original text copied to clipboard');
+                }).catch(err => {
+                    console.error('Error copying text: ', err);
+                });
+            });
+
+            copyCorrected.addEventListener('click', () => {
+                navigator.clipboard.writeText("{{ corrected_text }}").then(() => {
+                    alert('Corrected text copied to clipboard');
+                }).catch(err => {
+                    console.error('Error copying text: ', err);
+                });
+            });
+        });
+    </script>
 </body>
 </html>

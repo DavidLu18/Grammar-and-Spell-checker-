@@ -24,32 +24,3 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     document.head.appendChild(style);
 });
-
-let chunks = [];
-let recorder;
-let audioStream;
-
-document.getElementById('recordButton').onclick = async () => {
-    audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    recorder = new MediaRecorder(audioStream);
-    recorder.ondataavailable = event => chunks.push(event.data);
-    recorder.start();
-    document.getElementById('recordButton').disabled = true;
-    document.getElementById('stopButton').disabled = false;
-};
-
-document.getElementById('stopButton').onclick = () => {
-    recorder.stop();
-    recorder.onstop = async () => {
-        const blob = new Blob(chunks, { type: 'audio/wav' });
-        const file = new File([blob], 'audio.wav', { type: 'audio/wav' });
-        const audioInput = document.getElementById('audioInput');
-        const dataTransfer = new DataTransfer();
-        dataTransfer.items.add(file);
-        audioInput.files = dataTransfer.files;
-        document.getElementById('audioForm').submit();
-    };
-    document.getElementById('recordButton').disabled = false;
-    document.getElementById('stopButton').disabled = true;
-    audioStream.getTracks().forEach(track => track.stop());
-};
